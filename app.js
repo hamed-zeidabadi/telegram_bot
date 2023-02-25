@@ -1,29 +1,26 @@
 const express = require("express");
-const { Telegraf } = require("telegraf");
-
 const app = express();
+const axios = require("axios");
+
+const token = "5804892821:AAGztQFYuCfDCjIjqqfrYm9Gafm9G565bEY";
+
+const { Bot } = require("grammy");
+
+// Create an instance of the `Bot`
+const bot = new Bot(token);
+
+// Handle the /start command.
+bot.command("start", (ctx) => ctx.reply("Welcome! Up and running."));
+// Handle other messages.
+bot.on("message", (ctx) => ctx.reply("Got another message!"));
+// Start the bot.
+bot.start();
+
+// Set up Express.js server
 app.use(express.json());
-const token = "6183386477:AAFk0_tFPy8DffcE1t0ad1bIMvFk0jzKAVg";
-const bot = new Telegraf(token);
+app.use(express.urlencoded({ extended: true }));
 
-// Handle start command
-bot.start((ctx) => {
-  ctx.reply(`Hi ${ctx.from.first_name}! Welcome to my bot!`);
-});
-
-// Handle text messages
-bot.on("text", (ctx) => {
-  const message = ctx.message.text;
-
-  // Reply to user
-  ctx.reply(`You said: ${message}`);
-});
-
-// Start bot polling
-bot.launch();
-
-// Start server
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`Bot running on port ${PORT}`);
+// Start App
+app.listen(3000, () => {
+  console.log("Local server started on port 3000");
 });
